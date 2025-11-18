@@ -2,18 +2,29 @@ package model;
 
 public class Product {
 	private int id;
-    private String name;
-    private Amount publicPrice;
-    private Amount wholesalerPrice;
-    private boolean available;
-    private int stock;
-    private static int totalProducts;
-    
-    public final static double EXPIRATION_RATE=0.60;
-    
+	private String name;
+	private Amount publicPrice;
+	private Amount wholesalerPrice;
+	private boolean available;
+	private int stock;
+	private static int totalProducts;
+
+	public final static double EXPIRATION_RATE = 0.60;
+
 	public Product(String name, Amount wholesalerPrice, boolean available, int stock) {
 		super();
-		this.id = totalProducts+1;
+		this.id = totalProducts + 1;
+		this.name = name;
+		this.wholesalerPrice = wholesalerPrice;
+		this.publicPrice = new Amount(wholesalerPrice.getValue() * 2);
+		this.available = available;
+		this.stock = stock;
+		totalProducts++;
+	}
+
+	public Product(int id, String name, Amount wholesalerPrice, boolean available, int stock) {
+		super();
+		this.id = id;
 		this.name = name;
 		this.wholesalerPrice = wholesalerPrice;
 		this.publicPrice = new Amount(wholesalerPrice.getValue() * 2);
@@ -37,8 +48,6 @@ public class Product {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
 
 	public Amount getPublicPrice() {
 		return publicPrice;
@@ -79,9 +88,10 @@ public class Product {
 	public static void setTotalProducts(int totalProducts) {
 		Product.totalProducts = totalProducts;
 	}
-	
+
 	public void expire() {
-		this.publicPrice.setValue(this.getPublicPrice().getValue()*EXPIRATION_RATE); ;
+		this.publicPrice.setValue(this.getPublicPrice().getValue() * EXPIRATION_RATE);
+		;
 	}
 
 	@Override
@@ -90,13 +100,4 @@ public class Product {
 				+ ", available=" + available + ", stock=" + stock + "]";
 	}
 
-	
-	
-	
-	
-	
-
-    
-
-    
 }

@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import dao.DaoImplFile;
+import dao.DaoImplJDBC;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
@@ -28,7 +29,7 @@ public class Shop {
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
-	private DaoImplFile dao = new DaoImplFile();
+	private DaoImplJDBC dao = new DaoImplJDBC();
 
 	final static double TAX_RATE = 1.04;
 
@@ -491,6 +492,7 @@ public class Shop {
 			return;
 		}
 		inventory.add(product);
+		dao.addProduct(product);
 		numberProducts++;
 	}
 	
@@ -522,5 +524,22 @@ public class Shop {
 		return null;
 
 	}
-
+	
+	/**
+	 * update product in inventory
+	 * 
+	 * @param product
+	 */
+	public void updateProduct(Product product) {
+		this.dao.updateProduct(product);
+	}
+	
+	/**
+	 * delete product by id
+	 * 
+	 * @param product id
+	 */
+	public void deleteProduct(int id) {
+		this.dao.deleteProduct(id);
+	}
 }

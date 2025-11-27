@@ -115,14 +115,15 @@ public class DaoImplJDBC implements Dao {
 
 	@Override
 	public void addProduct(Product product) {
-		String query = "insert into inventory (name, wholesalerPrice, available, stock) values (?, ?, ?, ?)";
+		String query = "insert into inventory (id, name, wholesalerPrice, available, stock) values (?, ?, ?, ?, ?)";
 		try {
 			connect();
 			PreparedStatement ps = connection.prepareStatement(query);
-			ps.setString(1, product.getName());
-			ps.setDouble(2, product.getWholesalerPrice().getValue());
-			ps.setBoolean(3, true);
-			ps.setInt(4, product.getStock());
+			ps.setInt(1, product.getId());
+			ps.setString(2, product.getName());
+			ps.setDouble(3, product.getWholesalerPrice().getValue());
+			ps.setBoolean(4, true);
+			ps.setInt(5, product.getStock());
 			ps.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

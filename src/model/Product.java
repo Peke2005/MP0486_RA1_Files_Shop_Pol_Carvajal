@@ -1,22 +1,46 @@
 package model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "inventory")
 public class Product {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(name = "name")
 	private String name;
+	@Column(name = "price")
+	private double price;
+	@Transient
 	private Amount publicPrice;
+	@Transient
 	private Amount wholesalerPrice;
+	@Column(name = "available")
 	private boolean available;
+	@Column(name = "stock")
 	private int stock;
+	@Transient
 	private static int totalProducts;
 
 	public final static double EXPIRATION_RATE = 0.60;
 
+	public Product() {
+		super();
+	}
+
 	public Product(String name, Amount wholesalerPrice, boolean available, int stock) {
 		super();
-		this.id = totalProducts + 1;
+		this.id = 0;
 		this.name = name;
-		this.wholesalerPrice = wholesalerPrice;
-		this.publicPrice = new Amount(wholesalerPrice.getValue() * 2);
+		this.price = wholesalerPrice.getValue();
+		refreshPricesFromBase();
 		this.available = available;
 		this.stock = stock;
 		totalProducts++;
@@ -26,8 +50,8 @@ public class Product {
 		super();
 		this.id = id;
 		this.name = name;
-		this.wholesalerPrice = wholesalerPrice;
-		this.publicPrice = new Amount(wholesalerPrice.getValue() * 2);
+		this.price = wholesalerPrice.getValue();
+		refreshPricesFromBase();
 		this.available = available;
 		this.stock = stock;
 		totalProducts++;
@@ -50,6 +74,7 @@ public class Product {
 	}
 
 	public Amount getPublicPrice() {
+		ensurePublicPrice();
 		return publicPrice;
 	}
 
@@ -58,11 +83,16 @@ public class Product {
 	}
 
 	public Amount getWholesalerPrice() {
+		ensureWholesalerPrice();
 		return wholesalerPrice;
 	}
 
 	public void setWholesalerPrice(Amount wholesalerPrice) {
 		this.wholesalerPrice = wholesalerPrice;
+		if (wholesalerPrice != null) {
+			this.price = wholesalerPrice.getValue();
+			this.publicPrice = new Amount(this.price * 2);
+		}
 	}
 
 	public boolean isAvailable() {
@@ -81,6 +111,15 @@ public class Product {
 		this.stock = stock;
 	}
 
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+		refreshPricesFromBase();
+	}
+
 	public static int getTotalProducts() {
 		return totalProducts;
 	}
@@ -90,14 +129,30 @@ public class Product {
 	}
 
 	public void expire() {
-		this.publicPrice.setValue(this.getPublicPrice().getValue() * EXPIRATION_RATE);
-		;
+		this.getPublicPrice().setValue(this.getPublicPrice().getValue() * EXPIRATION_RATE);
 	}
 
 	@Override
 	public String toString() {
-		return "Product [name=" + name + ", publicPrice=" + publicPrice + ", wholesalerPrice=" + wholesalerPrice
-				+ ", available=" + available + ", stock=" + stock + "]";
+		return "Product [name=" + name + ", publicPrice=" + getPublicPrice() + ", wholesalerPrice="
+				+ getWholesalerPrice() + ", available=" + available + ", stock=" + stock + "]";
+	}
+
+	private void ensurePublicPrice() {
+		if (publicPrice == null) {
+			publicPrice = new Amount(price * 2);
+		}
+	}
+
+	private void ensureWholesalerPrice() {
+		if (wholesalerPrice == null) {
+			wholesalerPrice = new Amount(price);
+		}
+	}
+
+	private void refreshPricesFromBase() {
+		wholesalerPrice = new Amount(price);
+		publicPrice = new Amount(price * 2);
 	}
 
 }

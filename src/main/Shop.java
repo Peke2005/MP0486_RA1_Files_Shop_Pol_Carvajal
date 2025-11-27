@@ -18,8 +18,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import dao.DaoImplFile;
-import dao.DaoImplJDBC;
+import dao.DaoImplHibernate;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
@@ -29,7 +28,7 @@ public class Shop {
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
-	private DaoImplJDBC dao = new DaoImplJDBC();
+	private DaoImplHibernate dao = new DaoImplHibernate();
 
 	final static double TAX_RATE = 1.04;
 
@@ -269,6 +268,7 @@ public class Shop {
 		if (product != null) {
 			// remove it
 			if (inventory.remove(product)) {
+				deleteProduct(product.getId());
 				System.out.println("El producto " + name + " ha sido eliminado");
 
 			} else {
@@ -294,6 +294,7 @@ public class Shop {
 			int stock = scanner.nextInt();
 			// update stock product
 			product.setStock(product.getStock() + stock);
+			updateProduct(product);
 			System.out.println("El stock del producto " + name + " ha sido actualizado a " + product.getStock());
 
 		} else {

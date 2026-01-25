@@ -153,23 +153,25 @@ public class ProductView extends JDialog implements ActionListener{
 			case Constants.OPTION_ADD_PRODUCT:
 				// check product does not exist
 				product = shop.findProduct(textFieldName.getText());
-				
 				if (product != null) {
 					JOptionPane.showMessageDialog(null, "Producto ya existe ", "Error",
 							JOptionPane.ERROR_MESSAGE);
-					
 				} else {
-					product = new Product(textFieldName.getText(),
-							new Amount(Double.parseDouble(textFieldPrice.getText())),
-							true,
-							Integer.parseInt(textFieldStock.getText()));
+					int newId = 1;
+					if (!shop.getInventory().isEmpty()) {
+						newId = shop.getInventory().get(shop.getInventory().size() - 1).getId() + 1;
+					}
+					product = new Product(newId,
+						textFieldName.getText(),
+						new Amount(Double.parseDouble(textFieldPrice.getText())),
+						true,
+						Integer.parseInt(textFieldStock.getText()));
 					shop.addProduct(product);
 					JOptionPane.showMessageDialog(null, "Producto añadido ", "Information",
 							JOptionPane.INFORMATION_MESSAGE);
 					// release current screen
-					dispose();	
+					dispose();
 				}
-				
 				break;
 				
 			case Constants.OPTION_ADD_STOCK:

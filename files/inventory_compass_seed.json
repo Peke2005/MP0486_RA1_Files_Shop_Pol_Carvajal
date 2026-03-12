@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "Manzana",
+    "price": 1.2,
+    "available": true,
+    "stock": 30
+  },
+  {
+    "id": 2,
+    "name": "Pera",
+    "price": 1.5,
+    "available": true,
+    "stock": 25
+  },
+  {
+    "id": 3,
+    "name": "Hamburguesa",
+    "price": 3.0,
+    "available": true,
+    "stock": 20
+  },
+  {
+    "id": 4,
+    "name": "Fresa",
+    "price": 2.2,
+    "available": true,
+    "stock": 40
+  }
+]

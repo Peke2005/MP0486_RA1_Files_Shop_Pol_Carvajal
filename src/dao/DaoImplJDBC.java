@@ -29,7 +29,6 @@ public class DaoImplJDBC implements Dao {
 		}
 
 	}
-
 	@Override
 	public void disconnect() {
 		// TODO Auto-generated method stub

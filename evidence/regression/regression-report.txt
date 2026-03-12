@@ -1,0 +1,16 @@
+PASS | 1. Verificar carga inventario desde coleccion inventory | 460 ms
+
+PASS | 2a. Verificar exportar inventario escribe historical_inventory y muestra mensaje informacional | 606 ms
+
+PASS | 2b. Verificar exportar inventario muestra mensaje error si falla historical_inventory | 453 ms
+
+PASS | 3a. Verificar anadir producto inserta un nuevo documento | 536 ms
+
+PASS | 3b. Verificar anadir stock actualiza el stock de un documento existente | 484 ms
+
+PASS | 3c. Verificar eliminar producto elimina un documento existente | 477 ms
+
+PASS | 4. Verificar login correcto accede al menu principal | 505 ms
+
+PASS | 5. Verificar login incorrecto muestra mensaje de error | 467 ms
+

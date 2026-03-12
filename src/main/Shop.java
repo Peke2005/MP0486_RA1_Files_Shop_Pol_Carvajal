@@ -18,7 +18,8 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import dao.DaoImplHibernate;
+import dao.Dao;
+import dao.DaoImplMongoDB;
 
 public class Shop {
 	private Amount cash = new Amount(100.00);
@@ -28,11 +29,16 @@ public class Shop {
 //	private Sale[] sales;
 	private ArrayList<Sale> sales;
 	private int numberSales;
-	private DaoImplHibernate dao = new DaoImplHibernate();
+	private Dao dao;
 
 	final static double TAX_RATE = 1.04;
 
 	public Shop() {
+		this(new DaoImplMongoDB());
+	}
+
+	public Shop(Dao dao) {
+		this.dao = dao;
 		inventory = new ArrayList<Product>();
 		sales = new ArrayList<Sale>();
 	}
@@ -117,6 +123,7 @@ public class Shop {
 			System.out.println("===========================");
 			System.out.println("Menu principal miTienda.com");
 			System.out.println("===========================");
+			System.out.println("0) Exportar inventario");
 			System.out.println("1) Contar caja");
 			System.out.println("2) Añadir producto");
 			System.out.println("3) Añadir stock");
@@ -131,6 +138,14 @@ public class Shop {
 			opcion = scanner.nextInt();
 
 			switch (opcion) {
+			case 0:
+				if (shop.writeInventory()) {
+					System.out.println("Inventario exportado correctamente");
+				} else {
+					System.out.println("Error exportando el inventario");
+				}
+				break;
+
 			case 1:
 				shop.showCash();
 				break;

@@ -2,18 +2,12 @@ package model;
 
 import main.Logable;
 import dao.*;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Transient;
 
-@Entity
 public class Employee extends Person implements Logable{
-	@Id
 	private int employeeId;
 	private String password;
 	// connection using JDBC SQL
-	@Transient
-	private DaoImplObjectDB dao = new DaoImplObjectDB();
+	private Dao dao = new DaoImplMongoDB();
 	
 //	public static final int USER = 123;
 //	public static final String PASSWORD = "test";

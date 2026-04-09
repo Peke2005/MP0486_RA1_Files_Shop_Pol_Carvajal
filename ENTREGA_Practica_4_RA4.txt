@@ -1,3 +1,0 @@
-Practica: Practica 4 RA4 - Gestion de Tienda
-Alumno: Pol Carvajal Garcia
-Repositorio: https://github.com/Peke2005/MP0486_RA1_Files_Shop_Pol_Carvajal

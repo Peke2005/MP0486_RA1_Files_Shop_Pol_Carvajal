@@ -1,9 +1,12 @@
 package regression;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
 import java.awt.Dialog;
+import java.awt.Font;
 import java.awt.Frame;
+import java.awt.Graphics2D;
 import java.awt.GraphicsEnvironment;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -26,12 +29,18 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import javax.imageio.ImageIO;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.TypedQuery;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
+import dao.DaoImplObjectDB;
+import model.Employee;
 import view.LoginView;
 import view.ShopView;
 
@@ -45,6 +54,7 @@ public class ShopRegressionTest {
 		Files.createDirectories(EVIDENCE_DIR);
 		Path reportPath = EVIDENCE_DIR.resolve("regression-report.txt");
 		Files.write(reportPath, new byte[0]);
+		generateObjectDbUsersEvidence();
 
 		int failures = 0;
 		failures += runTest(reportPath, "1. Verificar login correcto accede al menu principal",
@@ -79,6 +89,54 @@ public class ShopRegressionTest {
 		} finally {
 			disposeAllWindows();
 		}
+	}
+
+	private static void generateObjectDbUsersEvidence() throws Exception {
+		DaoImplObjectDB dao = new DaoImplObjectDB();
+		dao.connect();
+		dao.disconnect();
+
+		String objectDbPath = System.getProperty("shop.objectdb.path", "objects/users.odb");
+		EntityManagerFactory factory = Persistence.createEntityManagerFactory(objectDbPath);
+		EntityManager manager = factory.createEntityManager();
+		TypedQuery<Employee> query = manager.createQuery("SELECT e FROM model.Employee e ORDER BY e.employeeId",
+				Employee.class);
+		List<Employee> employees = query.getResultList();
+		manager.close();
+		factory.close();
+
+		writeObjectDbEvidenceImage(EVIDENCE_DIR.resolve("objectdb-users-evidence.png"), objectDbPath, employees);
+	}
+
+	private static void writeObjectDbEvidenceImage(Path outputPath, String objectDbPath, List<Employee> employees)
+			throws Exception {
+		int width = 1200;
+		int lineHeight = 34;
+		int lines = 6 + employees.size();
+		int height = Math.max(360, lines * lineHeight + 40);
+
+		BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+		Graphics2D graphics = image.createGraphics();
+		graphics.setColor(Color.WHITE);
+		graphics.fillRect(0, 0, width, height);
+		graphics.setColor(new Color(20, 20, 20));
+		graphics.setFont(new Font("Consolas", Font.BOLD, 28));
+		graphics.drawString("Evidencia ObjectDB - users", 30, 50);
+		graphics.setFont(new Font("Consolas", Font.PLAIN, 21));
+		graphics.drawString("Ruta base datos: " + objectDbPath, 30, 95);
+		graphics.drawString("Consulta: SELECT e FROM model.Employee e ORDER BY e.employeeId", 30, 130);
+		graphics.drawString("Registros encontrados: " + employees.size(), 30, 165);
+
+		int y = 215;
+		for (Employee employee : employees) {
+			String row = "employeeId=" + employee.getEmployeeId() + " | name=" + employee.getName() + " | password="
+					+ employee.getPassword();
+			graphics.drawString(row, 30, y);
+			y += lineHeight;
+		}
+
+		ImageIO.write(image, "png", outputPath.toFile());
+		graphics.dispose();
 	}
 
 	private static void doTestSuccessfulLoginOpensMainMenu() throws Exception {

@@ -68,11 +68,18 @@ Resultado esperado del runner:
 
 Ruta: `evidence/regression/`
 
+- `objectdb-users-evidence.png` (evidencia de registros en la tabla `users` de ObjectDB)
 - `regression-report.txt`
 - `login-ok-credentials.png` (pantalla login con credenciales correctas escritas)
 - `login-ok-shopview.png` (menu principal tras login correcto)
 - `login-error-credentials.png` (pantalla login con credenciales incorrectas escritas)
 - `login-error-dialog.png` (mensaje de error tras login incorrecto)
+
+### ObjectDB - tabla users
+
+<p align="center">
+  <img src="./evidence/regression/objectdb-users-evidence.png" alt="Evidencia ObjectDB users" width="900">
+</p>
 
 ### Login correcto - credenciales introducidas
 

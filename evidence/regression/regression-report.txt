@@ -1,4 +1,4 @@
-PASS | 1. Verificar login correcto accede al menu principal | 2560 ms
+PASS | 1. Verificar login correcto accede al menu principal | 2214 ms
 
-PASS | 2. Verificar login incorrecto muestra mensaje de error | 1707 ms
+PASS | 2. Verificar login incorrecto muestra mensaje de error | 1613 ms
 
